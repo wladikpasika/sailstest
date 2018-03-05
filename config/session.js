@@ -1,3 +1,11 @@
+var MySQLSessionStore = require('express-mysql-session');
+var store_options =  {
+  adapter: 'sails-mysql',
+    host: 'localhost',
+    user: 'wlad', //optional
+    password: '000000', //optional
+    database: 'sails' //optional
+};
 /**
  * Session Configuration
  * (sails.config.session)
@@ -22,6 +30,8 @@ module.exports.session = {
   *                                                                          *
   ***************************************************************************/
   secret: 'f03289007d635d72cc9d3882d4d1a676',
+  store: new MySQLSessionStore(store_options)
+
 
 
   /***************************************************************************

@@ -29,14 +29,21 @@
     -->
 
     <!--STYLES-->
+    <link rel="stylesheet" href="/styles/bootstrap/css/bootstrap-grid.css">
+    <link rel="stylesheet" href="/styles/bootstrap/css/bootstrap-grid.min.css">
+    <link rel="stylesheet" href="/styles/bootstrap/css/bootstrap-reboot.css">
+    <link rel="stylesheet" href="/styles/bootstrap/css/bootstrap-reboot.min.css">
+    <link rel="stylesheet" href="/styles/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="/styles/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/styles/importer.css">
     <!--STYLES END-->
   </head>
 
   <body>
+
+  <%- partial('./navigation.ejs') %> <!--Добавляем навигацию-->
+
     <%- body %>
-
-
 
     <!--
         Client-side Templates
@@ -89,6 +96,10 @@
 
     <!--SCRIPTS-->
     <script src="/js/dependencies/sails.io.js"></script>
+    <script src="/js/bootstrap/js/bootstrap.bundle.js"></script>
+    <script src="/js/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/bootstrap/js/bootstrap.js"></script>
+    <script src="/js/bootstrap/js/bootstrap.min.js"></script>
     <!--SCRIPTS END-->
   </body>
 </html>

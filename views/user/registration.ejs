@@ -1,0 +1,17 @@
+<h1>Страница пользователя</h1>
+
+<% if (flash && flash.err) { %>
+<ul class="alert alert-danger">
+  <% Object.keys(flash.err).forEach(function(error){ %>
+    <li><%- JSON.stringify(flash.err[error]) %></li>
+  <%})%>
+</ul>
+<% } %>
+<form action = "/user/create" method = "POST">
+  <input type="text" name="name" placeholder="NAME"></br>
+  <input type="text" name="email" placeholder="EMAIL"></br>
+  <input type="text" name="password" placeholder="PASSWORD"></br>
+  <input type="text" name="confirmPassword" placeholder="CONFIRM PASSWORD"></br>
+  <input type="submit" value="Создать пользователя"></br>
+
+</form>

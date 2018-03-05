@@ -34,6 +34,53 @@ module.exports.routes = {
 
   '/': {
     view: 'static/index'
+  },
+  '/user/registration': {
+    controller: 'UserController',
+    action:'registration'
+  },
+
+  '/user/create': {
+    controller: 'UserController',
+    action:'create'
+  },
+  '/user/show/:id': {
+    controller: 'UserController',
+    action:'show'
+  },
+  '/user/update/first-lastname/:id': {
+    controller: 'UserController',
+    action:'update'
+  },
+
+  '/sessions/new': {
+    controller: 'SessionController',
+    action:'new'
+  },
+  '/sessions/create': {
+    controller:'SessionController',
+    action:'create'
+  },
+  '/sessions/destroy': {
+    controller: 'SessionController',
+    action:'destroy'
+  },
+
+  '/books/show/:id': {
+    controller: 'BooksController',
+    action:'show'
+  },
+  '/books/create/': {
+    controller: 'BooksController',
+    action:'create'
+  },
+  '/books/update/': {
+    controller: 'BooksController',
+    action:'update'
+  },
+  '/books/destroy/': {
+    controller: 'BooksController',
+    action:'destroy'
   }
 
   /***************************************************************************

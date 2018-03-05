@@ -1,0 +1,14 @@
+<h1>Страница авторизации</h1>
+
+<% if (flash && flash.err) { %>
+<ul class="alert alert-danger">
+  <% Object.keys(flash.err).forEach(function(error){ %>
+  <li><%- flash.err[error].name  %> </br><%- flash.err[error].message %></li>
+  <%})%>
+</ul>
+<% } %>
+<form action = "/sessions/create" method = "POST">
+  <input type="text" name="email" placeholder="EMAIL"></br>
+  <input type="text" name="password" placeholder="PASSWORD"></br>
+  <input type="submit" value="Вход" name = "Вход"></br>
+</form>

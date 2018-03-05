@@ -1,0 +1,44 @@
+<% if (flash && flash.err) { %>
+<ul class="alert alert-danger">
+
+  <li><%- flash.err.message %></li>
+
+</ul>
+<% } %>
+
+<% if (flash && flash.success) { %>
+<ul class="alert alert-success">
+  <li> <%- flash.success.message %> </li>
+</ul>
+<% } %>
+
+
+<%if (user.firstname&&user.lastname) {%>
+
+<h1><%= user.firstname %></h1>
+<h2><%= user.lastname %></h2>
+
+<%} else {%>
+
+<h1><%=user.name%></h1>
+<h2><%=user.email%></h2>
+
+<% } %>
+
+
+
+<form action = "/user/update/first-lastname/<%= user.id %>" method = "POST">
+  <input type="text" name="firstname" placeholder="Firstname"></br>
+  <input type="text" name="lastname" placeholder="Lastname"></br>
+  <input type="submit" value="Добавить Имя и Фамилию"></br>
+</form>
+
+
+<h3>Добавить книгку</h3>
+
+
+<form action = "/books/create/" method = "POST">
+  <input type="text" name="title" placeholder="TITLE"></br>
+  <input type="text" name="author" placeholder="AUTHOR"></br>
+  <input type="submit" value="Добавить Книгу"></br>
+</form>
