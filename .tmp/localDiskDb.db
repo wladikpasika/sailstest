@@ -1,0 +1,48 @@
+{
+  "data": {
+    "user": [
+      {
+        "name": "Wlad",
+        "email": "wladikpasika@gmail.com",
+        "createdAt": "2018-03-02T12:05:27.573Z",
+        "updatedAt": "2018-03-02T12:05:27.573Z",
+        "id": 1
+      },
+      {
+        "name": "Wlad",
+        "email": "wladikkpasika@gmail.com",
+        "createdAt": "2018-03-02T13:18:37.488Z",
+        "updatedAt": "2018-03-02T13:18:37.488Z",
+        "id": 2
+      }
+    ]
+  },
+  "schema": {
+    "user": {
+      "name": {
+        "type": "string"
+      },
+      "email": {
+        "type": "string",
+        "unique": true
+      },
+      "id": {
+        "type": "integer",
+        "autoIncrement": true,
+        "primaryKey": true,
+        "unique": true
+      },
+      "createdAt": {
+        "type": "datetime"
+      },
+      "updatedAt": {
+        "type": "datetime"
+      }
+    }
+  },
+  "counters": {
+    "user": {
+      "id": 2
+    }
+  }
+}
