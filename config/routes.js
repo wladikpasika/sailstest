@@ -74,12 +74,22 @@ module.exports.routes = {
     controller: 'BooksController',
     action:'create'
   },
-  '/books/update/': {
+  '/books/update/:id': {
     controller: 'BooksController',
-    action:'update'
+    action:'updateStatus'
   },
-  '/books/destroy/': {
+  '/books/destroy/:id': {
     controller: 'BooksController',
+    action:'destroy'
+  },
+
+  '/registry/create/:id': {
+    controller: 'RegistryController',
+    action:'create'
+  },
+
+  '/registry/destroy/:id': {
+    controller: 'RegistryController',
     action:'destroy'
   }
 

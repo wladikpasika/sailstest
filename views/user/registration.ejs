@@ -1,17 +1,68 @@
-<h1>Страница пользователя</h1>
-
 <% if (flash && flash.err) { %>
 <ul class="alert alert-danger">
-  <% Object.keys(flash.err).forEach(function(error){ %>
-    <li><%- JSON.stringify(flash.err[error]) %></li>
-  <%})%>
+
+  <li><%- JSON.stringify(flash.err) %></li>
+
 </ul>
 <% } %>
-<form action = "/user/create" method = "POST">
-  <input type="text" name="name" placeholder="NAME"></br>
-  <input type="text" name="email" placeholder="EMAIL"></br>
-  <input type="text" name="password" placeholder="PASSWORD"></br>
-  <input type="text" name="confirmPassword" placeholder="CONFIRM PASSWORD"></br>
-  <input type="submit" value="Создать пользователя"></br>
 
-</form>
+<% if (flash && flash.err && flash.err.message) { %>
+<ul class="alert alert-danger">
+
+  <li><%- JSON.stringify(flash.err.message) %></li>
+
+</ul>
+<% } %>
+
+<% if (flash && flash.success) { %>
+<ul class="alert alert-success">
+  <li> <%- flash.success.message %> </li>
+</ul>
+<% } %>
+
+<div class = "container createTemplate">
+  <div class = "row">
+    <div class = "col-md-6">
+      <h1>Форма Регистрации</h1>
+      <div class="box box-info">
+        <div class="box-header with-border">
+          <h3 class="box-title">Заполните все поля</h3>
+        </div>
+        <!-- /.box-header -->
+        <!-- form start -->
+        <form class="form-horizontal" action = "/user/create/" method = "POST" name="name">
+          <div class="box-body">
+            <div class="form-group">
+              <label for="email-input" class="col-sm-2">Email</label>
+              <div class="col-sm-10">
+                <input type="email" class="form-control" id="email-input" placeholder="Email" name="email">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="password-input" class="col-sm-2">Password</label>
+
+              <div class="col-sm-10">
+                <input type="password" class="form-control" id="password"  name ="password">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="confirm-password" class="col-sm-2">Повторите пароль</label>
+
+              <div class="col-sm-10">
+                <input type="password" class="form-control" id="confirm-password" name ="confirmPassword">
+              </div>
+            </div>
+          </div>
+          <!-- /.box-body -->
+          <div class="box-footer">
+            <button type="submit" class="btn btn-danger">Отменить<span class ="button-close"><i class="fa fa-close"></i></span></button>
+            <button type="submit" class="btn btn-success pull-right">
+              Сохранить <span class ="button-check"></span></button>
+          </div>
+          <!-- /.box-footer -->
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>

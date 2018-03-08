@@ -1,7 +1,15 @@
 <% if (flash && flash.err) { %>
 <ul class="alert alert-danger">
 
-  <li><%- flash.err.message %></li>
+  <li><%- JSON.stringify(flash.err) %></li>
+
+</ul>
+<% } %>
+
+<% if (flash && flash.err && flash.err.message) { %>
+<ul class="alert alert-danger">
+
+  <li><%- JSON.stringify(flash.err.message) %></li>
 
 </ul>
 <% } %>
@@ -12,33 +20,209 @@
 </ul>
 <% } %>
 
+<div class="container">
 
-<%if (user.firstname&&user.lastname) {%>
+  <div  class = "row">
+    <%if (user.firstname&&user.lastname) {%>
 
-<h1><%= user.firstname %></h1>
-<h2><%= user.lastname %></h2>
+    <h1><%= user.firstname %> <%= user.lastname %></h1>
+    <%} else {%>
 
-<%} else {%>
+    <h1>Логин: <%=user.name%> </br> Email: <%=user.email%></h1>
 
-<h1><%=user.name%></h1>
-<h2><%=user.email%></h2>
 
+    <% } %>
+    <%if (user.firstname&&user.lastname) {%> <h1>&nbsp <%= admin?" - Администратор":" - Обычный пользователь" %></h1> <%}%>
+
+    <div class = "col-sm-12">
+
+      <% if(owner) {%>
+      <button value ="Редактировать" class = "btn btn-danger button-edit">Редактировать</button>
+      <div class="edit" style ="display:none;">
+      <h3>Добавить/сменить имя/фамилию</h3>
+      <form action = "/user/update/first-lastname/<%= user.id %>" method = "POST" class ="form-horizontal">
+        <div class = "form-group"></div>
+        <label for="first-name">Ваше имя</label>
+        <input type="text" name="firstname" placeholder="Firstname" id = "first-name">
+        <label for="last-name">Фамилия</label>
+        <input type="text" name="lastname" placeholder="Lastname" id = "last-name">
+        <input type="submit" class="btn btn-success" value="Вперед">
+      </form>
+
+      <% if (admin) { %>
+      <h3>Добавить книгу</h3>
+
+      <form action = "/books/create/" method = "POST" class="form-horizontal">
+        <div class = "box box-info">
+          <div class="box-header with-border">
+            <h3 class="box-title">Заполните все поля</h3>
+          </div>
+          <div class = "box-body">
+
+        <div class="form-group">
+          <label for="title" class = "col-sm-2">Название книги</label>
+          <div class="col-sm-10"><input type="text" name="title" placeholder="Название книги" id="title" class = "col-sm-8">
+          </div></div>
+        <div class="form-group">
+        <label for="title" class = "col-sm-2">Автор</label>
+          <div class="col-sm-10"><input type="text" name="author" placeholder="Автор" id ='author' class = "col-sm-8">
+          </div></div>
+        <div class="form-group">
+        <label for="title" class = "col-sm-2">Год издания</label>
+          <div class="col-sm-10"><input type="number" name="year" placeholder="Год" id = "year" class = "col-sm-8">
+          </div></div>
+        <div class="form-group">
+        <label for="title" class = "col-sm-2">Издание</label>
+          <div class="col-sm-10"><input type="text" name="editor" placeholder="Издание" id="editor" class = "col-sm-8">
+          </div></div>
+        <div class="form-group">
+        <input type="submit" class = "btn btn-success" value="Добавить Книгу">
+        </div>
+          </div>
+        </div>
+      </form>
+      </div>
+      <%}%>
+
+   </div>
+  </div>
+</div>
+
+<div class="container">
+<% if (books) { %>
+  <h3>Библиотека</h3>
+<table class="table table-hover">
+  <thead>
+  <tr>
+    <th>Название</th>
+    <th>Автор</th>
+    <th>Год</th>
+    <th>Издательство</th>
+    <th>Наличие</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% books.forEach((book)=>{ %>
+  <tr>
+
+    <td><%= book.title %></td>
+    <td><%= book.author %></td>
+    <td><%= book.year %></td>
+    <td><%= book.editor %></td>
+    <td>
+
+      <% if(book.inLibrary){%>
+      <a href = "/registry/create/<%= book.id%>?date=<%= monthLaterIso %>">Заказать книгу</a>
+    <%} else {%>
+
+    Книгу уже взяли
+
+      <% } %></td>
+  </tr>
+  <%})%>
+  </tbody>
+</table>
 <% } %>
+</div>
+<%} %>
+<% if (registerBooks.length!=0) { %>
+<div class="container">
+  <h3>Книги, которые <%= owner?'Вы должны вернуть':'должен вернуть пользователь' %></h3>
+  <table class="table table-hover">
+    <thead>
+    <tr>
+      <th>Название</th>
+      <th>Автор</th>
+      <th>Год</th>
+      <th>Издательство</th>
+      <th>Когда взяли</th>
+      <th>Когда должны вернуть</th>
+      <% if(owner) {%><th>Вернуть</th><%}%>
+    </tr>
+    </thead>
+    <tbody>
+    <% registerBooks.forEach((registerBooks)=>{ %>
+    <tr>
+
+      <td><%= registerBooks.title %></td>
+      <td><%= registerBooks.author %></td>
+      <td><%= registerBooks.year %></td>
+      <td><%= registerBooks.editor %></td>
+      <td><%= registerBooks.take_date %></td>
+      <td><%= registerBooks.return_date %></td>
+      <% if(owner) {%><td><a href = "/registry/destroy/<%= registerBooks.registerId%>">Вернуть книгу</a></td> <%}%>
+    </tr>
+    <%})%>
+    </tbody>
+  </table>
+</div>
+<% } %>
+<% if (admin) { %>
+<div class="container">
+  <h3>Регистр (Администратор может вернуть любую книгу)</h3>
+  <table class="table table-hover">
+    <thead>
+    <tr>
+      <th>Название</th>
+      <th>Автор</th>
+      <th>Год</th>
+      <th>Издательство</th>
+      <th>Наличие</th>
+      <th>Когда взяли</th>
+      <th>Когда должны вернуть</th>
+      <th>Логин пользователя/ссылка</th>
+      <th>Email</th>
+      <th>Вернуть</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% allRegister.forEach((register)=>{ %>
+    <tr>
+      <td><%= register.title %></td>
+      <td><%= register.author %></td>
+      <td><%= register.year %></td>
+      <td><%= register.editor %></td>
+      <td><%= register.inLibrary %></td>
+      <td><%= register.take_date %></td>
+      <td><%= register.return_date %></td>
+      <td><a href = "/user/show/<%=register.user%>"><%= register.name %></a></td>
+      <td><%= register.email %></td>
+      <td>
+        <% if(!register.inLibrary){%>
+        <a href = "/registry/destroy/<%= register.id%>">Вернуть книгу</a>
+        <%} else {%>Ошибка<% } %></td>
+
+    <%})%>
+    </tr>
+    </tbody>
+  </table>
 
 
 
-<form action = "/user/update/first-lastname/<%= user.id %>" method = "POST">
-  <input type="text" name="firstname" placeholder="Firstname"></br>
-  <input type="text" name="lastname" placeholder="Lastname"></br>
-  <input type="submit" value="Добавить Имя и Фамилию"></br>
-</form>
+  <table class="table table-hover">
+    <thead>
+    <tr>
 
-
-<h3>Добавить книгку</h3>
-
-
-<form action = "/books/create/" method = "POST">
-  <input type="text" name="title" placeholder="TITLE"></br>
-  <input type="text" name="author" placeholder="AUTHOR"></br>
-  <input type="submit" value="Добавить Книгу"></br>
-</form>
+      <th>Логин пользователя</th>
+      <th>Email</th>
+      <th>Имя</th>
+      <th>Фамилия</th>
+      <th>Привилегии</th>
+      <th>Ссылка на профиль</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% allUsers.forEach((user)=>{ %>
+    <tr>
+      <td><%= user.name %></td>
+      <td><%= user.email %></td>
+      <td><%= user.firstname %></td>
+      <td><%= user.lastname %></td>
+      <td><%= user.status %></td>
+      <td><a href = "/user/show/<%= user.id %>">Ссылка</a></td>
+      <%})%>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<% } %>

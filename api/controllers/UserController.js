@@ -1,4 +1,6 @@
-var setBook = require('./BooksController').create;
+var getBooks = require('./BooksController').showAll;
+var getRegisterBooks = require('./RegistryController').showRegisterBooks;
+var getAllRegister = require('./RegistryController').getAllRegister;
 /**
  * UserController
  *
@@ -12,6 +14,7 @@ module.exports = {
     res.locals.flash={};
     res.locals.flash = _.clone(req.session.flash);
     req.session.flash = {};
+
 	  res.view();
   },
   create:function(req,res,next){
@@ -31,20 +34,98 @@ module.exports = {
   },
   show:function(req,res,next){
     "use strict";
+    /*Устанавливаем крайнюю дату возврата книг*/
+    this.setMonthLaterIso(res);/*данные добавляются в res.locals.monthLaterIso*/
+    /*после выполнения двух промисов выполняем основную функцию*/
 
-    User.findOne(req.param('id'), function foundUser(err,user){
-      if (err) return next(err);
-      if (!user) return next();
-      res.locals.user = user;
-      res.locals.flash = {};
-      res.locals.flash = _.clone(req.session.flash);
-      req.session.flash = {};
+    if(+req.param('id')!==+req.session.User.id){
+      res.locals.owner = false;
+    }else{res.locals.owner = true}
 
-      res.view();
+
+    Promise.all([getBooks(),getRegisterBooks({user:req.param('id')}), getAllRegister(), this.showAll()]).then((result)=>{
+
+      res.locals.books = result[0];
+
+      let registerBooks = [];
+
+      result[1].forEach((itemRegister)=>{
+        result[0].find((itemBook)=>{
+          if(itemBook.id===itemRegister.book){
+            itemBook.take_date = itemRegister.take_date;
+            itemBook.return_date = itemRegister.return_date;
+            itemBook.registerId = itemRegister.id;
+            registerBooks.push(itemBook);
+          }
+        });
+      });
+
+      let allRegister = [];
+        result[2].forEach((register)=>{
+          result[3].find((user)=>{
+            if(register.user===user.id)
+            {
+              register.name = user.name;
+              register.email = user.email;
+              register.firstname = user.firstname;
+              register.lastname = user.lastname;
+              register.status = user.status;
+
+              result[0].find((book)=>{
+                if(register.book===book.id){
+
+                  register.title = book.title;
+                  register.author = book.author;
+                  register.year = book.year;
+                  register.editor = book.editor;
+                  register.inLibrary = book.inLibrary;
+
+                  allRegister.push(register);
+                }
+              });
+            }
+          })
+        });
+
+      res.locals.registerBooks = registerBooks;
+      res.locals.allRegister = allRegister;
+      res.locals.allUsers = result[3];
+
+      return result;
+
+    },(reject)=>{
+      res.locals.registerBooks = [];
+      res.locals.books = [];
+      return reject
+    }).then((resolve)=>{
+
+      User.findOne(req.param('id'), function foundUser(err,user){
+        if (err) {return next(err)}
+        if (!user) {return next()}
+        res.locals.user = user;
+        user.status==='admin'?res.locals.admin=true:res.locals.admin=false;
+        res.locals.flash = _.clone(req.session.flash);
+        req.session.flash = {};
+        return res.view();
+      });
     });
   },
-  update:function(req,res,next){
+  showAll:function(){
     "use strict";
+    return new Promise((resolve,reject)=>{
+
+      User.find((err,users)=>{
+        if(err) {
+          return reject(err);
+        }
+        return resolve(users);
+      })
+    });
+
+  },
+  update:function(req,res){
+    "use strict";
+    console.log(req.params.all());
 
     if(req.params.all().firstname.length<3&&req.params.all().lastname.length<3){
 
@@ -79,6 +160,19 @@ module.exports = {
       return res.redirect('/user/show/'+updated[0].id)
 
     });
+  },
+  setMonthLaterIso:function(res){
+    "use strict";
+    var date = new Date();
+    date.setDate(date.getDate() + 30);
+    var m = date.getMonth()+1;
+    var d = date.getDate();
+    var day= d<10?'0'+d:d;
+    var month= m<10?'0'+m:m;
+    var year = date.getFullYear();
+
+    var monthLaterIso = year+'-'+month+'-'+day;
+    return res.locals.monthLaterIso = monthLaterIso;
   }
 };
 
