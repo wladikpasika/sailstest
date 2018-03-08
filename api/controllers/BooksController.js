@@ -81,7 +81,7 @@ module.exports = {
   },
   showAll:function(){
     "use strict";
-    return new Promise((resolve,reject)=>{
+    return new Promise(function(resolve,reject){
       Books.find(function books(err, books){
         if(err) {
           return reject(err);

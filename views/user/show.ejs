@@ -37,8 +37,8 @@
     <div class = "col-sm-12">
 
       <% if(owner) {%>
-      <button value ="Редактировать" class = "btn btn-danger button-edit">Редактировать</button>
-      <div class="edit" style ="display:none;">
+      <!--<button value ="Редактировать" class = "btn btn-danger button-edit">Редактировать</button>-->
+      <div class="edit">
       <h3>Добавить/сменить имя/фамилию</h3>
       <form action = "/user/update/first-lastname/<%= user.id %>" method = "POST" class ="form-horizontal">
         <div class = "form-group"></div>
@@ -198,6 +198,7 @@
   </table>
 
 
+  <h3>Список всех пользователей</h3>
 
   <table class="table table-hover">
     <thead>

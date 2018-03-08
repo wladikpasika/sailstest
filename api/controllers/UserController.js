@@ -43,14 +43,14 @@ module.exports = {
     }else{res.locals.owner = true}
 
 
-    Promise.all([getBooks(),getRegisterBooks({user:req.param('id')}), getAllRegister(), this.showAll()]).then((result)=>{
+    Promise.all([getBooks(),getRegisterBooks({user:req.param('id')}), getAllRegister(), this.showAll()]).then(function(result){
 
       res.locals.books = result[0];
 
       let registerBooks = [];
 
-      result[1].forEach((itemRegister)=>{
-        result[0].find((itemBook)=>{
+      result[1].forEach(function(itemRegister){
+        result[0].find(function(itemBook){
           if(itemBook.id===itemRegister.book){
             itemBook.take_date = itemRegister.take_date;
             itemBook.return_date = itemRegister.return_date;
@@ -61,8 +61,8 @@ module.exports = {
       });
 
       let allRegister = [];
-        result[2].forEach((register)=>{
-          result[3].find((user)=>{
+        result[2].forEach(function(register){
+          result[3].find(function(user){
             if(register.user===user.id)
             {
               register.name = user.name;
@@ -71,7 +71,7 @@ module.exports = {
               register.lastname = user.lastname;
               register.status = user.status;
 
-              result[0].find((book)=>{
+              result[0].find(function(book){
                 if(register.book===book.id){
 
                   register.title = book.title;
@@ -93,11 +93,11 @@ module.exports = {
 
       return result;
 
-    },(reject)=>{
+    },function(reject){
       res.locals.registerBooks = [];
       res.locals.books = [];
       return reject
-    }).then((resolve)=>{
+    }).then(function(resolve){
 
       User.findOne(req.param('id'), function foundUser(err,user){
         if (err) {return next(err)}
@@ -112,9 +112,9 @@ module.exports = {
   },
   showAll:function(){
     "use strict";
-    return new Promise((resolve,reject)=>{
+    return new Promise(function(resolve,reject){
 
-      User.find((err,users)=>{
+      User.find(function(err,users){
         if(err) {
           return reject(err);
         }

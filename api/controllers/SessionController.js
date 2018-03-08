@@ -25,7 +25,7 @@ module.exports = {
       };
 	    res.redirect('/sessions/new'); return;
     };
-	  User.findOne({email:req.param('email')}).exec(function (err, user){
+	  User.findOne({email:req.param('email')}).exec(function(err, user){
       if (err) {
         req.session.flash = {
           err:[{

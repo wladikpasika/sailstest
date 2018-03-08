@@ -91,7 +91,7 @@ module.exports = {
   showRegisterBooks:function(param){
     "use strict";
 
-    return new Promise((resolve,reject)=>{
+    return new Promise(function(resolve,reject){
       Registry.find(param, function (err, books){
 
         if (err) {
@@ -104,7 +104,7 @@ module.exports = {
   },
   getAllRegister:function(){
     "use strict";
-    return new Promise((resolve,reject)=>{
+    return new Promise(function(resolve,reject){
       Registry.find(function (err, books){
 
         if (err) {
